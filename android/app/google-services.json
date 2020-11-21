@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "118129173636",
+    "firebase_url": "https://kirala-25d1e.firebaseio.com",
+    "project_id": "kirala-25d1e",
+    "storage_bucket": "kirala-25d1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118129173636:android:9c5cd24e7fa081b12d4ed1",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118129173636-4pc4pl4llr5c3ou0r5t1gb6sk2t8o0b0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_app",
+            "certificate_hash": "e05c2b306d7cf23fc5472016c2ca0660b561a246"
+          }
+        },
+        {
+          "client_id": "118129173636-qfcgnu9kpen7ojbvk69of80p12d6ue86.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOdM4Y1mrXzaEy8H4WE2GvNxkAMRCOJEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118129173636-qfcgnu9kpen7ojbvk69of80p12d6ue86.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
