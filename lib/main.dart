@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 // Import the firebase_core plugin
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app/firebase.dart';
+import 'package:flutter_app/grs.dart';
+import 'package:flutter_app/ilkekran.dart';
 import 'package:flutter_app/resimler.dart';
 import 'verilerigoster.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class CommonThings {
   static Size size;
 }
@@ -13,7 +15,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
 }
-
+FirebaseAuth _auth=FirebaseAuth.instance;
 class App extends StatelessWidget {
   // Create the initialization Future outside of `build`:
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -40,8 +42,13 @@ class App extends StatelessWidget {
 
           // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
+            if(_auth.currentUser!=null){
+              return goster();
+            }else{
+              return kullanici();
+            }
 
-            return verigonder();
+
           }
 
 

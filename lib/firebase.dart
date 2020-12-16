@@ -1,33 +1,5 @@
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'verilerigoster.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
-class verigonder extends StatefulWidget {
-
-
-  @override
-  _verigonderState createState() => _verigonderState();
-}
-
-class _verigonderState extends State<verigonder> {
-  final FirebaseFirestore _firestore= FirebaseFirestore.instance;
-
-  File _secilenresim;
-  File _kameradanresim;
-  TextEditingController txt= new TextEditingController();
-  TextEditingController txt2= new TextEditingController();
-  TextEditingController txt3= new TextEditingController();
-  TextEditingController txt4= new TextEditingController();
-  TextEditingController txt5= new TextEditingController();
-  var url;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
+/*ListView(
         children: [Container(
           margin: EdgeInsets.all(50),
         height: MediaQuery.of(context).size.height,
@@ -49,16 +21,6 @@ class _verigonderState extends State<verigonder> {
                 ),
               ),
               SizedBox(height: 20,),
-
-
-
-
-
-
-
-
-
-
 
               TextField(
                 controller: txt4,
@@ -147,55 +109,286 @@ class _verigonderState extends State<verigonder> {
           ),
         ),
     ]
-      ),
+      ),*/
+
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app/sepet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'verilerigoster.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class verigonder extends StatefulWidget {
+String kulad;
+verigonder({this.kulad});
+
+  @override
+  _verigonderState createState() => _verigonderState();
+}
+FirebaseAuth _auth=FirebaseAuth.instance;
+class _verigonderState extends State<verigonder> {
+
+  ProgressDialog progressDialog;
+  final FirebaseFirestore _firestore= FirebaseFirestore.instance;
+
+
+  var pagescont=PageController();
+  File _secilenresim;
+  File _kameradanresim;
+  TextEditingController txt= new TextEditingController();
+  TextEditingController txt2= new TextEditingController();
+  TextEditingController txt3= new TextEditingController();
+  TextEditingController txt4= new TextEditingController();
+  TextEditingController txt5= new TextEditingController();
+  var url;
+  int aktifstep=0;
+  bool complete=false;
+  bool hata=false;
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    progressDialog=ProgressDialog(context, type: ProgressDialogType.Normal);
+    progressDialog.style(message: 'Yükleniyor...');
+    return Scaffold(
+
+        body: Container(
+          color: Colors.white,
+          child: ListView(
+              children:[ Stepper(steps: tumadimlar(),
+                currentStep: aktifstep,
+                onStepContinue: next,
+
+                onStepCancel: cancel,
+
+
+              ),
+
+              ]
+          ),
+        )
+
+
+
+
+
     );
   }
-  void veriekle (String ad,String doc, var res, String aciklama,String lokasyon, String fiyat) async{
-     try{
+  List <Step> tumadimlar(){
+
+    List<Step> stepler=[
+
+      Step(title: Text("Ürün Adı"),
+
+
+          isActive: true,
+          content: TextFormField(
+            controller: txt,
+            decoration: InputDecoration(
+
+              hintText: "Ürün Adı Girin",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+
+            ),
+          )),
+
+      Step(title: Text("Ürün Açıklaması"),
+
+          isActive: true,
+          content: TextFormField(
+            controller: txt3,
+            decoration: InputDecoration(
+
+              hintText: "Ürün Açıklaması Girin",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+
+            ),
+          )
+      ),
+      Step(title: Text("Bulunduğunuz il"),
+
+          isActive: true,
+          content: TextFormField(
+            controller: txt4,
+            decoration: InputDecoration(
+
+              hintText: "Bulunduğunuz ili Girin",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+
+            ),
+          )),
+      Step(title: Text("Fiyat"),
+
+          isActive: true,
+          content: TextFormField(
+
+            controller: txt5,
+            decoration: InputDecoration(
+
+              hintText: "Fiyat",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+
+            ),
+
+
+
+          )),
+      Step(title: Text("Fotoğraf Ekle"),
+
+          isActive: true,
+          content:Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[ IconButton(icon: Icon(Icons.image_outlined, size: 45, ), onPressed: (){
+                setState(() {
+                  complete=true;
+                });
+                galeriden(txt3.text);
+                _kameradanresim==null ? Text("Lütfen Galeriden Resim Seçin") :Image.file(_kameradanresim, );
+
+              }),
+                SizedBox(width: 35,),
+                IconButton(icon: Icon(Icons.photo_camera, size: 45,), onPressed:(){
+                  setState(() {
+                    complete=true;
+                  });
+                  kameradan(txt3.text);
+                  _secilenresim==null ? Text("Lütfen Galeriden Resim Seçin") :Image.file(_secilenresim, );
+
+
+                })
+              ]
+          )
+        /**/
+
+      ),
+    ];
+    return stepler;
+  }
+
+
+
+
+  next(){
+    if(aktifstep +1 != tumadimlar().length) {
+      git(aktifstep +1);
+
+
+    } else {
+
+      if
+      (url==null){
+
+
+      } else{
+
+        String a=_auth.currentUser.displayName;
+
+
+
+          veriekle(a,txt.text, url, txt3.text, txt4.text, txt5.text);
+
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>goster(t:url, )));
+
+
+
+
+      }
+
+
+
+
+
+    }
+
+
+
+
+  }
+  cancel(){
+    if(aktifstep>0){
+      git(aktifstep-1);
+    }
+  }
+  git(int step){
+    setState(() {
+      aktifstep=step;
+    });
+  }
+
+
+  void veriekle (String kul,String ad,  var res, String aciklama,String lokasyon, String fiyat) async{
+
+    try{
       Map<String, dynamic> hamza= Map();
+      hamza['kullanici']=kul;
       hamza['ad']=ad;
       hamza['resim']=res;
       hamza['aciklama']=aciklama;
       hamza['lokasyon']=lokasyon;
       hamza['fiyat']=fiyat;
 
-      await _firestore.collection("users").doc(doc).set(hamza, SetOptions(merge: true));
+      await _firestore.collection("users").doc().set(hamza, SetOptions(merge: true));
+
+
     }
     catch(e){
       debugPrint(e);
 
     }
-    
+
 
   }
 
 
   void kameradan(String foto)async{
-  var reesim= await ImagePicker.pickImage(source: ImageSource.camera);
-  setState(() {
-    _kameradanresim=reesim;
-  });
-  Reference ref=FirebaseStorage.instance.ref().child("user").child(foto);
-  UploadTask uploadTask= ref.putFile(_secilenresim);
-  var r = await (await uploadTask).ref.getDownloadURL() ;
 
-  debugPrint("Urlmizzzzzzzzzzzzzzzz:"+r);
-  url=r;
+    try{
+      progressDialog.show();
+      var reesim= await ImagePicker.pickImage(source: ImageSource.camera);
+      setState(() {
+        _kameradanresim=reesim;
+      });
+      Reference ref=FirebaseStorage.instance.ref().child("user").child(foto);
+      UploadTask uploadTask= ref.putFile(_kameradanresim);
+      var r = await (await uploadTask).ref.getDownloadURL() ;
+
+      debugPrint("Urlmizzzzzzzzzzzzzzzz:"+r);
+      url=r;
+      progressDialog.hide();}
+    catch(e){
+
+    }
+
   }
 
 
   void galeriden(String foto) async{
-    var resimm= await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _secilenresim=resimm;
-    });
+    try{
+      progressDialog.show();
+      var resimm= await ImagePicker.pickImage(source: ImageSource.gallery);
+      setState(() {
+        _secilenresim=resimm;
+      });
 
-    Reference ref=FirebaseStorage.instance.ref().child("user").child(foto);
-    UploadTask uploadTask= ref.putFile(_secilenresim);
-   var r = await (await uploadTask).ref.getDownloadURL() ;
+      Reference ref=FirebaseStorage.instance.ref().child("user").child(foto);
+      UploadTask uploadTask= ref.putFile(_secilenresim);
+      var r = await (await uploadTask).ref.getDownloadURL() ;
 
-    debugPrint("Urlmizzzzzzzzzzzzzzzz:"+r);
-    url=r;
+      debugPrint("Urlmizzzzzzzzzzzzzzzz:"+r);
+      url=r;
+      progressDialog.hide();
+    } catch(e){
+
+    }
+
 
 
   }

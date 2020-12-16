@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toast/toast.dart';
 class sepetim extends StatefulWidget {
 
 
@@ -11,6 +12,7 @@ class sepetim extends StatefulWidget {
 
 final FirebaseFirestore _firestore= FirebaseFirestore.instance;
 class _sepetimState extends State<sepetim> {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -18,14 +20,7 @@ class _sepetimState extends State<sepetim> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if(snapshot.data == null) return CircularProgressIndicator();
           return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                "Kira'La",
-                style: GoogleFonts.oxanium(fontSize: 25),
-              ),
-              elevation: 0,
-              backgroundColor: Colors.brown.shade400,
-              actions: [ IconButton(icon: Icon(Icons.search), onPressed: (){}),],),
+
 
             body: ListView(
 
@@ -43,7 +38,7 @@ class _sepetimState extends State<sepetim> {
                       color: Colors.white,
                       child: Container(
                         margin: EdgeInsets.all(15),
-                        height: 240,
+                        height: 300,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
@@ -68,7 +63,7 @@ class _sepetimState extends State<sepetim> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.start,
                                   children: [
-                                    Text("Kullanıcı Adı"),
+                                    Text(doc['kullanici']),
                                     Text("Tarih"),
                                   ],
                                 ),
@@ -151,8 +146,53 @@ class _sepetimState extends State<sepetim> {
                               ),
                             ),
 
-                          ]),
 
+                          ]),
+                          SizedBox(height: 10,),
+                          Container(
+                            margin: EdgeInsets.all(15),
+
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+
+                                  onTap: ()async { await _firestore.collection('sepet').doc(doc.id).delete();
+                                  Toast.show("Ürün Sepetten Kaldırıldı", context, duration: Toast.LENGTH_LONG,gravity: Toast.BOTTOM);
+
+                                  },
+
+                                  child: Material(
+                                    elevation: 5,
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Container(
+                                      height: 30,
+                                      width: 70,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.red.withOpacity(0.7),
+                                      ),
+                                      child: Icon(Icons.delete,color: Colors.white,size: 20,),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 20,),
+                                Material(
+                                  elevation: 5,
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Container(
+                                    height: 30,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.green.withOpacity(0.7),
+                                    ),
+                                    child: Icon(Icons.arrow_forward_ios, color: Colors.white,size: 20,),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
 
 
 
@@ -169,7 +209,6 @@ class _sepetimState extends State<sepetim> {
 
                 ),
                 )
-
                     .toList()),
           );
         });
